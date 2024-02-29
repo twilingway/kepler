@@ -1,5 +1,6 @@
 import React from "react";
 import keplerGlReducer from "kepler.gl/reducers";
+import { LOCALE_CODES } from "kepler.gl/localization";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { taskMiddleware } from "react-palm/tasks";
 import { Provider, useDispatch } from "react-redux";
@@ -7,8 +8,15 @@ import KeplerGl from "kepler.gl";
 import { addDataToMap } from "kepler.gl/actions";
 import useSwr from "swr";
 
+const customizedKeplerGlReducer = keplerGlReducer.initialState({
+  uiState: {
+    // use Finnish locale
+    locale: LOCALE_CODES.ru,
+  },
+});
+
 const reducers = combineReducers({
-  keplerGl: keplerGlReducer
+  keplerGl: customizedKeplerGlReducer,
 });
 
 const store = createStore(reducers, {}, applyMiddleware(taskMiddleware));
@@ -38,15 +46,15 @@ function Map() {
           datasets: {
             info: {
               label: "COVID-19",
-              id: "covid19"
+              id: "covid19",
             },
-            data
+            data,
           },
           option: {
             centerMap: true,
-            readOnly: false
+            readOnly: false,
           },
-          config: {}
+          config: {},
         })
       );
     }
